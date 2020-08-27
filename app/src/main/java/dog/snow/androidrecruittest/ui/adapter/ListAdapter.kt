@@ -7,11 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import dog.snow.androidrecruittest.R
 import dog.snow.androidrecruittest.ui.model.ListItem
 
 class ListAdapter(private val onClick: (item: ListItem, position: Int, view: View) -> Unit) :
     androidx.recyclerview.widget.ListAdapter<ListItem, ListAdapter.ViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView =
             LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
@@ -32,7 +35,13 @@ class ListAdapter(private val onClick: (item: ListItem, position: Int, view: Vie
             val tvAlbumTitle: TextView = findViewById(R.id.tv_album_title)
             tvTitle.text = item.title
             tvAlbumTitle.text = item.albumTitle
-            //TODO: display item.thumbnailUrl in ivThumb
+
+            Glide.with(this.context)
+                .load(item.thumbnailUrl)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .placeholder(R.drawable.ic_placeholder)
+                .into(ivThumb)
+
             setOnClickListener { onClick(item, adapterPosition, this) }
         }
     }
