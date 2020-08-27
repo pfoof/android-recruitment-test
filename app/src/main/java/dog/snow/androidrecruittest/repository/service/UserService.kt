@@ -8,6 +8,6 @@ import retrofit2.http.Path
 interface UserService {
 
     @GET("/users/{id}")
-    fun getUser(@Path("id") user: Int): Call<RawUser>;
+    fun getUser(@Path("id") user: Int): Call<RawUser>
 
 }
