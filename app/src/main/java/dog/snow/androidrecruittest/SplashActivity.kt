@@ -16,6 +16,8 @@ import dog.snow.androidrecruittest.repository.service.PhotoService
 import dog.snow.androidrecruittest.repository.service.UserService
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
+import java.net.ConnectException
+import java.net.SocketTimeoutException
 
 class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
 
@@ -33,13 +35,13 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
     private var albumIdsToDownload: Set<Int>? = null
     private var userIdsToDownload: Set<Int>? = null
 
-    private val parentJob = Job()
-    private val coroutineScope = CoroutineScope(parentJob + Dispatchers.IO)
+    private var parentJob = Job()
+    private var coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+        tryDownload()
     }
 
     private fun tryDownload() {
@@ -48,63 +50,77 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
             return
         }
 
+        coroutineScope = CoroutineScope(Dispatchers.IO)
+
         coroutineScope.launch {
-            val tmpPhotos = photos ?:
-                getPhotosAsync().await()
+            try {
+                val tmpPhotos = photos ?: getPhotosAsync().await()
 
-            // Post download check
-            if (tmpPhotos == null) {
-                runOnUiThread { showError("Received no photos!") }
-                return@launch
-            }
+                // Post download check
+                if (tmpPhotos == null) {
+                    cancel("Received no photos!")
+                    return@launch
+                }
 
-            photos = tmpPhotos // save photos for next launch
+                photos = tmpPhotos // save photos for next launch
 
-            val albumsIds = albumIdsToDownload ?: SetGenerator.getAlbumIdsFromPhotos(tmpPhotos)
-            val tmpAlbums = getAlbumsAsync(albumsIds).await()
-            // Post download check
-            if (tmpAlbums.any { a -> a == null }) {
+                val albumsIds = albumIdsToDownload ?: SetGenerator.getAlbumIdsFromPhotos(tmpPhotos)
+                val tmpAlbums = getAlbumsAsync(albumsIds).await()
+                // Post download check
+                if (tmpAlbums.any { a -> a == null }) {
 
-                // Filter out albums that are downloaded
-                albumIdsToDownload = albumsIds.filter { id -> !tmpAlbums.any { a -> a != null && a.id == id } }.toSet()
-                if(albums == null)
+                    // Filter out albums that are downloaded
+                    albumIdsToDownload =
+                        albumsIds.filter { id -> !tmpAlbums.any { a -> a != null && a.id == id } }
+                            .toSet()
+                    if (albums == null)
+                        albums = tmpAlbums.filterNotNull().toMutableList()
+                    else
+                        albums?.addAll(tmpAlbums.filterNotNull())
+
+                    cancel("Some albums not received!")
+                    return@launch
+                }
+
+                if (albums == null)
                     albums = tmpAlbums.filterNotNull().toMutableList()
                 else
                     albums?.addAll(tmpAlbums.filterNotNull())
 
-                runOnUiThread { showError("Some albums not received!") }
-                return@launch
-            }
+                // Filter not null shouldn't happen
+                val userIds = userIdsToDownload
+                    ?: SetGenerator.getUserIdsFromAlbums(tmpAlbums.filterNotNull())
+                val tmpUsers = getUsersAsync(userIds).await()
 
-            if(albums == null)
-                albums = tmpAlbums.filterNotNull().toMutableList()
-            else
-                albums?.addAll(tmpAlbums.filterNotNull())
+                if (tmpUsers.any { u -> u == null }) {
 
-            // Filter not null shouldn't happen
-            val userIds = userIdsToDownload ?: SetGenerator.getUserIdsFromAlbums(tmpAlbums.filterNotNull())
-            val tmpUsers = getUsersAsync(userIds).await()
+                    // Filter out users that are downloaded
+                    userIdsToDownload =
+                        userIds.filter { id -> !tmpUsers.any { u -> u != null && u.id == id } }
+                            .toSet()
+                    if (users == null)
+                        users = tmpUsers.filterNotNull().toMutableList()
+                    else
+                        users?.addAll(tmpUsers.filterNotNull())
 
-            if(tmpUsers.any{ u -> u == null }) {
+                    cancel("Some users not received!")
+                    return@launch
+                }
 
-                // Filter out users that are downloaded
-                userIdsToDownload = userIds.filter { id -> !tmpUsers.any { u -> u != null && u.id == id } }.toSet()
-                if(users == null)
+                if (users == null)
                     users = tmpUsers.filterNotNull().toMutableList()
                 else
                     users?.addAll(tmpUsers.filterNotNull())
 
-                runOnUiThread { showError("Some users not received!") }
-                return@launch
-            }
-
-            if(users == null)
-                users = tmpUsers.filterNotNull().toMutableList()
-            else
-                users?.addAll(tmpUsers.filterNotNull())
-
-            runOnUiThread {
-                launchMainActivity()
+                runOnUiThread {
+                    launchMainActivity()
+                }
+            } catch (e: SocketTimeoutException) {
+                runOnUiThread { showError(e.message) }
+            } catch (e:CancellationException) {
+                runOnUiThread { showError(e.message) }
+            } catch (e: ConnectException) {
+                runOnUiThread { showError(e.message) }
             }
         }
     }
