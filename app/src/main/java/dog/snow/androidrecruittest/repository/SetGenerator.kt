@@ -7,6 +7,6 @@ object SetGenerator {
     fun getAlbumIdsFromPhotos(list: List<RawPhoto>): Set<Int> =
         list.map { photo -> photo.albumId }.toSet()
 
-    fun getUserIdsFromPhotos(list: List<RawAlbum>): Set<Int> =
+    fun getUserIdsFromAlbums(list: List<RawAlbum>): Set<Int> =
         list.map { album -> album.userId }.toSet()
 }
