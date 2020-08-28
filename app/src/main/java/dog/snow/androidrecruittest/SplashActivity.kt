@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dog.snow.androidrecruittest.extensions.getAlbumsAsync
+import dog.snow.androidrecruittest.extensions.getPhotosAsync
+import dog.snow.androidrecruittest.extensions.getUsersAsync
 import dog.snow.androidrecruittest.extensions.hasNetwork
 import dog.snow.androidrecruittest.repository.Endpoint
 import dog.snow.androidrecruittest.repository.SetGenerator
@@ -21,9 +24,9 @@ import java.net.SocketTimeoutException
 
 class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
 
-    private val photoService: PhotoService by inject()
-    private val userService: UserService by inject()
-    private val albumService: AlbumService by inject()
+    val photoService: PhotoService by inject()
+    val userService: UserService by inject()
+    val albumService: AlbumService by inject()
 
     /*
     * Let's keep them globally so if one of them fails, we don't redownload from the
@@ -34,9 +37,8 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
     private var users: MutableList<RawUser>? = null
     private var albumIdsToDownload: Set<Int>? = null
     private var userIdsToDownload: Set<Int>? = null
-
-    private var parentJob = Job()
-    private var coroutineScope = CoroutineScope(Dispatchers.IO)
+    
+    var coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,26 +127,7 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
         }
     }
 
-    private fun getPhotosAsync(): Deferred<List<RawPhoto>?> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async photoService.getPhotos(100).execute().body()
-        }
 
-    private fun getUsersAsync(users: Set<Int>): Deferred<Set<RawUser?>> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async users.map { u -> getUserAsync(u) }.toSet()
-        }
-
-    private fun getUserAsync(id: Int): RawUser?
-        = userService.getUser(id).execute().body()
-
-    private fun getAlbumsAsync(albums: Set<Int>): Deferred<Set<RawAlbum?>> =
-        coroutineScope.async(Dispatchers.IO) {
-            return@async albums.map { a -> getAlbumAsync(a) }.toSet()
-        }
-
-    private fun getAlbumAsync(id: Int): RawAlbum?
-        = albumService.getAlbum(id).execute().body()
 
 
     private fun showError(errorMessage: String?) {
