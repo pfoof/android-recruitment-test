@@ -1,5 +1,6 @@
 package dog.snow.androidrecruittest.ui.adapter
 
+import android.content.res.Configuration
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,10 +37,13 @@ class ListAdapter(private val onClick: (item: ListItem, position: Int, view: Vie
             tvTitle.text = item.title
             tvAlbumTitle.text = item.albumTitle
 
+            val isNight = (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+            val placeholderResource = if(isNight) R.drawable.ic_placeholder_dark else R.drawable.ic_placeholder
+
             Glide.with(this.context)
                 .load(item.thumbnailUrl)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.drawable.ic_placeholder)
+                .placeholder(placeholderResource)
                 .into(ivThumb)
 
             setOnClickListener { onClick(item, adapterPosition, this) }
