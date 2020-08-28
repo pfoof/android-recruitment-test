@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
     private var users: MutableList<RawUser>? = null
     private var albumIdsToDownload: Set<Int>? = null
     private var userIdsToDownload: Set<Int>? = null
-    
+
     var coroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
