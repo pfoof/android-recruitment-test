@@ -5,7 +5,10 @@ import dog.snow.androidrecruittest.repository.Endpoint
 import dog.snow.androidrecruittest.repository.service.AlbumService
 import dog.snow.androidrecruittest.repository.service.PhotoService
 import dog.snow.androidrecruittest.repository.service.UserService
+import dog.snow.androidrecruittest.viewmodels.AlbumsViewModel
 import dog.snow.androidrecruittest.viewmodels.ListItemsViewModel
+import dog.snow.androidrecruittest.viewmodels.PhotosViewModel
+import dog.snow.androidrecruittest.viewmodels.UsersViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidContext
@@ -21,6 +24,9 @@ class SnowDogApplication: Application() {
         single<UserService> { inject<Endpoint>().value.retrofit.create(UserService::class.java) }
 
         viewModel { ListItemsViewModel() }
+        viewModel { AlbumsViewModel() }
+        viewModel { PhotosViewModel() }
+        viewModel { UsersViewModel() }
     }
 
     override fun onCreate() {
