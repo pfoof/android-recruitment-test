@@ -1,5 +1,9 @@
 # Snowdog Android Recruitment test
 
+#### The `ViewModel`s logical diagram
+
+![VeiwModel and Observer diagram](art/ViewModelsLogic.png)
+
 ### We are glad that you've joined SNOW.DOG recruitment process. Below is task for you, good luck!
 
 1. Fork this repo to your github.
