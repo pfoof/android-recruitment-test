@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class PhotosViewModel: CoroutineViewModel() {
 
-    private var photos: MutableLiveData<List<RawPhoto>> = MutableLiveData()
+    var photos: MutableLiveData<List<RawPhoto>> = MutableLiveData()
 
     fun preparePhotos(intent: Intent) {
         val photosJob = async(Dispatchers.IO) {

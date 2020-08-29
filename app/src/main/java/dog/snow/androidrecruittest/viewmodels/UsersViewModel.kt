@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class UsersViewModel: CoroutineViewModel() {
 
-    private var users: MutableLiveData<Map<Int, RawUser>> = MutableLiveData()
+    var users: MutableLiveData<Map<Int, RawUser>> = MutableLiveData()
 
     fun prepareUsers(intent: Intent) {
         val usersJob = async(Dispatchers.IO) {

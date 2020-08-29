@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class AlbumsViewModel: CoroutineViewModel() {
 
-    private var albums: MutableLiveData<Map<Int, RawAlbum>> = MutableLiveData()
+    var albums: MutableLiveData<Map<Int, RawAlbum>> = MutableLiveData()
 
     fun prepareAlbums(intent: Intent) {
         val albumsJob = async(Dispatchers.IO) {
