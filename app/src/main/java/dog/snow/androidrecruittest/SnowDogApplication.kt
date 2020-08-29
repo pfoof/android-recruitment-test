@@ -5,9 +5,11 @@ import dog.snow.androidrecruittest.repository.Endpoint
 import dog.snow.androidrecruittest.repository.service.AlbumService
 import dog.snow.androidrecruittest.repository.service.PhotoService
 import dog.snow.androidrecruittest.repository.service.UserService
+import dog.snow.androidrecruittest.viewmodels.ListItemsViewModel
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 class SnowDogApplication: Application() {
@@ -17,6 +19,8 @@ class SnowDogApplication: Application() {
         single<PhotoService> { inject<Endpoint>().value.retrofit.create(PhotoService::class.java) }
         single<AlbumService> { inject<Endpoint>().value.retrofit.create(AlbumService::class.java) }
         single<UserService> { inject<Endpoint>().value.retrofit.create(UserService::class.java) }
+
+        viewModel { ListItemsViewModel() }
     }
 
     override fun onCreate() {

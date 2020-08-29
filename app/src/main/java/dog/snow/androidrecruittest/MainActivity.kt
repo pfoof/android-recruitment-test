@@ -6,25 +6,21 @@ import dog.snow.androidrecruittest.repository.CollectionToTreeMap
 import dog.snow.androidrecruittest.repository.model.RawAlbum
 import dog.snow.androidrecruittest.repository.model.RawPhoto
 import dog.snow.androidrecruittest.repository.model.RawUser
+import dog.snow.androidrecruittest.ui.model.ListItem
+import dog.snow.androidrecruittest.viewmodels.ListItemsViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class MainActivity : AppCompatActivity(R.layout.main_activity){
 
-    private var users: TreeMap<Int, RawUser>? = null
-    private var photos: List<RawPhoto>? = null
-    private var albums: TreeMap<Int, RawAlbum>? = null
+    private val dataViewModel: ListItemsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        val _photos = intent.getParcelableArrayExtra("photos") ?: arrayOf()
-        val _albums = intent.getParcelableArrayExtra("albums") ?: arrayOf()
-        val _users = intent.getParcelableArrayExtra("users") ?: arrayOf()
-
-        photos = _photos.mapNotNull { it as RawPhoto }
-        users = CollectionToTreeMap.getUsersTree(_users.mapNotNull { it as RawUser })
-        albums = CollectionToTreeMap.getAlbumTree(_albums.mapNotNull { it as RawAlbum })
 
     }
+
+
 }
