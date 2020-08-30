@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.AppTheme" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+
+    <style name="AppTheme" parent="Base.AppTheme" />
+
+    <style name="AppTheme.SplashTheme" />
+
+</resources>
