@@ -6,5 +6,8 @@ import dog.snow.androidrecruittest.ui.model.ListItem
 
 fun List<ListItem>.filterPrefix(string: String): List<ListItem> =
     this.filter { item ->
-        item.title.startsWith(string) || item.albumTitle.startsWith(string)
+        item.title.startsWith(string, ignoreCase = true)
+                || item.albumTitle.startsWith(string, ignoreCase = true)
+                || item.title.contains(" $string", ignoreCase = true)
+                || item.albumTitle.contains(" $string", ignoreCase = true)
     }
