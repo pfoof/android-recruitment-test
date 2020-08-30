@@ -1,6 +1,7 @@
 package dog.snow.androidrecruittest.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -78,6 +79,16 @@ class ListFragment : Fragment(R.layout.list_fragment) {
     }
 
     private fun onClickItemList(i: ListItem, pos: Int, v: View) {
-        Toast.makeText(this.context, "Clicked ${i.title}", Toast.LENGTH_SHORT).show()
+        try {
+            val photo = photosViewModel.photos.value?.get(pos)
+            photo?.let {
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.add(R.id.coordinator, DetailsFragment(it))
+                    ?.commit()
+            }
+        } catch (e: ArrayIndexOutOfBoundsException) {
+            Log.e("ListFragment", "AIOOBE: This should never happen!")
+        }
     }
 }
