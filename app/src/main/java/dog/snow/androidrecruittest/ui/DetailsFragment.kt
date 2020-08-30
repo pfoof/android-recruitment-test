@@ -3,10 +3,13 @@ package dog.snow.androidrecruittest.ui
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import dog.snow.androidrecruittest.R
+import dog.snow.androidrecruittest.extensions.loadMocked
 import dog.snow.androidrecruittest.repository.model.RawAlbum
 import dog.snow.androidrecruittest.repository.model.RawPhoto
 import dog.snow.androidrecruittest.repository.model.RawUser
@@ -33,6 +36,7 @@ class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_f
             updateAlbumWithPhoto(albums)
         })
 
+        loadFullSizeImage()
         tryUpdatingBefore()
     }
 
@@ -114,6 +118,19 @@ class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_f
             username.setText(R.string.unknown)
             email.setText(R.string.unknown)
             phone.setText(R.string.unknown)
+        }
+    }
+
+    private fun loadFullSizeImage() {
+        val v = this.view
+        if(v is ViewGroup) {
+            val imageView = v.findViewById<ImageView>(R.id.iv_photo)
+            imageView?.let {
+                Glide.with(this)
+                    .loadMocked(photo.url)
+                    .placeholder(R.drawable.ic_placeholder)
+                    .into(imageView)
+            }
         }
     }
 }
