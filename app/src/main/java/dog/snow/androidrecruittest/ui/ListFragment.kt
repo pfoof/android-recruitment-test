@@ -2,7 +2,6 @@ package dog.snow.androidrecruittest.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,7 +14,6 @@ import dog.snow.androidrecruittest.ui.model.ListItem
 import dog.snow.androidrecruittest.viewmodels.AlbumsViewModel
 import dog.snow.androidrecruittest.viewmodels.ListItemsViewModel
 import dog.snow.androidrecruittest.viewmodels.PhotosViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,16 +23,14 @@ class ListFragment : Fragment(R.layout.list_fragment) {
     private val albumsViewModel: AlbumsViewModel by sharedViewModel()
     private val photosViewModel: PhotosViewModel by sharedViewModel()
 
-    private val adapter = ListAdapter {i, p, v -> onClickItemList(i, p, v)}
+    private var adapter = ListAdapter {i, p, v -> onClickItemList(i, p, v)}
+    private var recyclerView: RecyclerView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewGroup = this.view
-        if(viewGroup is ViewGroup) {
-            val recyclerView = viewGroup.findViewById<RecyclerView>(R.id.rv_items)
-            recyclerView.adapter = adapter
-        }
+        recyclerView = view.findViewById(R.id.rv_items)
+        recyclerView?.adapter = adapter
 
         listItemsViewModel.listItems.observe(this.viewLifecycleOwner, Observer { listItems -> updateItemListAdapter(listItems) })
 
@@ -75,11 +71,9 @@ class ListFragment : Fragment(R.layout.list_fragment) {
     }
 
     private fun updateItemListAdapter(list: List<ListItem>) {
-        val viewGroup = this.view
-        if(viewGroup is ViewGroup) {
-            val recyclerView = viewGroup.findViewById<RecyclerView>(R.id.rv_items)
-            (recyclerView.adapter as ListAdapter).submitList(list)
-            (recyclerView.adapter as ListAdapter).notifyDataSetChanged()
+        adapter.submitList(list) {
+            recyclerView?.visibility = View.VISIBLE
+            adapter.notifyDataSetChanged()
         }
     }
 
