@@ -28,6 +28,8 @@ class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_f
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view.setOnClickListener {  } // The ignore listener
+
         usersViewModel.users.observe(this.viewLifecycleOwner, Observer {users ->
             updateUserWithAlbum(users)
         })
@@ -133,4 +135,6 @@ class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_f
             }
         }
     }
+
+
 }

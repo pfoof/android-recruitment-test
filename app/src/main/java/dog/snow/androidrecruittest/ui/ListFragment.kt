@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import dog.snow.androidrecruittest.MainActivity
 import dog.snow.androidrecruittest.R
 import dog.snow.androidrecruittest.repository.model.RawAlbum
 import dog.snow.androidrecruittest.repository.model.RawPhoto
@@ -82,10 +83,8 @@ class ListFragment : Fragment(R.layout.list_fragment) {
         try {
             val photo = photosViewModel.photos.value?.get(pos)
             photo?.let {
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.add(R.id.coordinator, DetailsFragment(it))
-                    ?.commit()
+                (activity as MainActivity)
+                    .showDetailsFragment(it)
             }
         } catch (e: ArrayIndexOutOfBoundsException) {
             Log.e("ListFragment", "AIOOBE: This should never happen!")
