@@ -2,6 +2,6 @@
 <network-security-config xmlns:android="http://schemas.android.com/apk/res/android">
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">jsonplaceholder.typicode.com</domain>
-        <domain includeSubdomains="true">via.placeholder.com</domain>
+        <domain includeSubdomains="true">placeholder.com</domain>
     </domain-config>
 </network-security-config>

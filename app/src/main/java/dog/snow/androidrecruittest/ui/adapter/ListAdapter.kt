@@ -14,6 +14,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import dog.snow.androidrecruittest.R
@@ -44,7 +45,7 @@ class ListAdapter(private val onClick: (item: ListItem, position: Int, view: Vie
             tvAlbumTitle.text = item.albumTitle
 
             Glide.with(this.context)
-                .load(item.thumbnailUrl)
+                .load(GlideUrl(item.thumbnailUrl, lazyHeaders))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.drawable.ic_placeholder)
                 .into(ivThumb)
@@ -61,5 +62,10 @@ class ListAdapter(private val onClick: (item: ListItem, position: Int, view: Vie
             override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem): Boolean =
                 oldItem == newItem
         }
+
+        private val lazyHeaders = LazyHeaders.Builder()
+            .addHeader("User-Agent", "Mozilla/5.0 Snow Dog User Agent 1.0 (Android)")
+            .addHeader("App-Agent", "Mozilla/5.0 Snow Dog App Agent 1.0 (Android)")
+            .build()
     }
 }
