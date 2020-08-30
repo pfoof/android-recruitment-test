@@ -147,5 +147,6 @@ class SplashActivity : AppCompatActivity(R.layout.splash_activity) {
         intent.putExtra("albums", albums!!.toTypedArray())
         intent.putExtra("users", users!!.toTypedArray())
         startActivity(intent)
+        this.finish()
     }
 }
