@@ -7,4 +7,5 @@
     android:layout_gravity="center_horizontal"
     android:fitsSystemWindows="true"
     app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+    android:theme="@style/AppToolbar"
     style="@style/AppToolbar" />

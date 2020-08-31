@@ -9,7 +9,9 @@
         <item name="android:background">@color/light_primary_dark_color</item>
         <item name="android:textColor">@color/sd_color_white</item>
         <item name="logo">@drawable/ic_logo_appbar</item>
+        <item name="titleTextColor">@color/sd_color_white</item>
         <item name="tint">@color/sd_color_white</item>
+        <item name="android:gravity">center_vertical|start</item>
     </style>
 
     <style name="DetailsFragmentContainer" parent="Base.AppTheme">
