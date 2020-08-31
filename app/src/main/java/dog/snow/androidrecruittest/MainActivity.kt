@@ -41,6 +41,10 @@ class MainActivity : AppCompatActivity(R.layout.main_activity){
         }
     }
 
+    fun setCurrentDetailsFragment(fragment: DetailsFragment) {
+        detailsFragment = fragment
+    }
+
     override fun onBackPressed() {
 
         detailsFragment?.let {

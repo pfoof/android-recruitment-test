@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
+import dog.snow.androidrecruittest.MainActivity
 import dog.snow.androidrecruittest.R
 import dog.snow.androidrecruittest.extensions.loadMocked
 import dog.snow.androidrecruittest.repository.model.RawAlbum
@@ -18,7 +19,41 @@ import dog.snow.androidrecruittest.viewmodels.UsersViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_fragment) {
+class DetailsFragment(private var photo: RawPhoto) : Fragment(R.layout.details_fragment) {
+
+    constructor(): this(RawPhoto(PHOTO_INEXISTENT,0, "", "", "")) {
+        // Put dummy photo at first
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        /* Restore photo from state
+        * and set the fragment to current */
+        if(photo.id == PHOTO_INEXISTENT)
+            savedInstanceState?.let {
+                if(it.containsKey("photo"))
+                    it.getParcelable<RawPhoto>("photo")?.let {restored ->
+                        photo = restored
+                        // Bind this fragment for back button event handling
+                        (activity as MainActivity).let { activity ->
+                            activity.setCurrentDetailsFragment(this)
+                        }
+                    }
+            }
+
+        /* If photo was not restored
+        * remove the fragment */
+        if(photo.id == PHOTO_INEXISTENT) {
+            activity?.let {
+                it.supportFragmentManager
+                    .beginTransaction()
+                    .remove(this)
+                    .commit()
+            }
+        }
+
+    }
 
     private val usersViewModel: UsersViewModel by sharedViewModel()
     private val albumsViewModel: AlbumsViewModel by sharedViewModel()
@@ -137,4 +172,13 @@ class DetailsFragment(private val photo: RawPhoto) : Fragment(R.layout.details_f
     }
 
 
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putParcelable("photo", photo)
+        super.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        const val PHOTO_INEXISTENT = -1
+    }
 }
