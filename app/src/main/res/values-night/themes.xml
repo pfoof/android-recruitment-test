@@ -3,8 +3,16 @@
 
     <style name="Base.AppTheme" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
 
-    <style name="AppTheme" parent="Base.AppTheme" />
+    <style name="AppTheme" parent="Base.AppTheme">
+        <item name="android:colorAccent">@color/dark_accent_color</item>
+        <item name="android:colorPrimary">@color/dark_primary_color</item>
+        <item name="colorPrimaryDark">@color/dark_primary_dark_color</item>
+    </style>
 
-    <style name="AppTheme.SplashTheme" />
+    <style name="AppTheme.SplashTheme">
+        <item name="android:colorAccent">@color/dark_accent_color</item>
+        <item name="android:colorPrimary">@color/dark_primary_color</item>
+        <item name="colorPrimaryDark">@color/dark_primary_dark_color</item>
+    </style>
 
 </resources>

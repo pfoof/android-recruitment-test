@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <style name="Widget.AppTheme.AppBar" parent="@style/Widget.Design.AppBarLayout" />
+    <style name="Widget.AppTheme.AppBar" parent="@style/Widget.Design.AppBarLayout">
+        <item name="android:background">@color/dark_primary_dark_color</item>
+        <item name="android:textColor">@color/sd_color_white</item>
+        <item name="tint">@color/sd_color_white</item>
+        <item name="titleTextColor">@color/sd_color_white</item>
+        <item name="android:gravity">center_vertical|start</item>
+    </style>
 
-    <style name="Widget.AppTheme.Banner" parent="@style/Widget.MaterialComponents.TextView" />
+    <style name="Widget.AppTheme.Banner" parent="@style/Widget.MaterialComponents.TextView">
+        <item name="android:background">@color/dark_accent_color</item>
+        <item name="android:textColor">@color/sd_color_white</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 
     <style name="AppToolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="android:background">@color/dark_primary_dark_color</item>
@@ -16,5 +26,9 @@
 
     <style name="DetailsFragmentContainer" parent="Base.AppTheme">
         <item name="android:background">@color/dark_background_color</item>
+    </style>
+
+    <style name="OfflineBanner" parent="Base.AppTheme">
+
     </style>
 </resources>
