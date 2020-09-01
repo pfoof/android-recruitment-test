@@ -1,12 +1,14 @@
 package dog.snow.androidrecruittest
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import dog.snow.androidrecruittest.repository.model.RawPhoto
 import dog.snow.androidrecruittest.ui.DetailsFragment
 import dog.snow.androidrecruittest.viewmodels.AlbumsViewModel
 import dog.snow.androidrecruittest.viewmodels.PhotosViewModel
 import dog.snow.androidrecruittest.viewmodels.UsersViewModel
+import kotlinx.android.synthetic.main.layout_banner.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity){
@@ -60,5 +62,14 @@ class MainActivity : AppCompatActivity(R.layout.main_activity){
 
         super.onBackPressed()
 
+    }
+
+    fun networkChanged(hasNetwork: Boolean) {
+        runOnUiThread {
+            banner.visibility = when(hasNetwork) {
+                false -> View.VISIBLE
+                true -> View.GONE
+            }
+        }
     }
 }

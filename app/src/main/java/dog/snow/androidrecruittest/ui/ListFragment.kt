@@ -3,6 +3,7 @@ package dog.snow.androidrecruittest.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.transition.TransitionInflater
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -35,6 +36,12 @@ class ListFragment : Fragment(R.layout.list_fragment), TextWatcher {
     private var recyclerView: RecyclerView? = null
 
     private val searchEditText: EditText by lazy { requireView().findViewById<EditText>(R.id.et_search) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val inflater = TransitionInflater.from(requireContext())
+        enterTransition = inflater.inflateTransition(R.transition.list_fragment_enter)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

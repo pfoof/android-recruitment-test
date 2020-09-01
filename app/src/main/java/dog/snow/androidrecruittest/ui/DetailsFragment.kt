@@ -1,6 +1,7 @@
 package dog.snow.androidrecruittest.ui
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -27,6 +28,10 @@ class DetailsFragment(private var photo: RawPhoto) : Fragment(R.layout.details_f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.details_fragment_exit)
+        enterTransition = inflater.inflateTransition(R.transition.details_fragment_enter)
 
         /* Restore photo from state
         * and set the fragment to current */
